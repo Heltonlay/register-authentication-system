@@ -12,5 +12,7 @@ import com.danielpsilva.register_authentication_system.entities.User;
 public interface UserRepository extends MongoRepository<User, String> {
 
 	@Query("{'username' : { $regex : ?0 } }")
-	public List<User> findByUsername(String username);
+	public List<User> findUsersByUsername(String username);
+	
+	public User findByUsername(String userName);
 }

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -16,6 +17,7 @@ public class UserService {
 
 	@Autowired
 	private UserRepository repo;
+	private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10);
 
 	public User findById(String id) {
 		Optional<User> obj = repo.findById(id);
@@ -30,10 +32,11 @@ public class UserService {
 	}
 
 	public List<User> findByUsername(String username) {
-		return repo.findByUsername(username);
+		return repo.findUsersByUsername(username);
 	}
 
 	public String insert(User obj) {
+		obj.setPassword(encoder.encode(obj.getPassword()));
 		User newUser = repo.insert(obj);
 		return newUser.getId();
 	}
