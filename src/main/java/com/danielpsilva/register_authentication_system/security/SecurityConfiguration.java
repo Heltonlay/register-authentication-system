@@ -24,11 +24,11 @@ public class SecurityConfiguration {
 	@Bean
 	protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http.csrf(customizer -> customizer.disable())
-				.authorizeHttpRequests(request -> request
-						.requestMatchers(HttpMethod.POST, "/users").permitAll()
-						.anyRequest().authenticated())
+				.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, "/users", "/users/login")
+						.permitAll().anyRequest().authenticated())
 				.httpBasic(Customizer.withDefaults())
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+				.build();
 	}
 
 	@Bean

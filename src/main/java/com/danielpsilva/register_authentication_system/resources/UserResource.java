@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.danielpsilva.register_authentication_system.entities.User;
 import com.danielpsilva.register_authentication_system.services.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/users")
@@ -62,5 +65,15 @@ public class UserResource {
 	public ResponseEntity<Void> delete(@PathVariable String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<String> login(HttpSession session, Authentication auth) {
+		return ResponseEntity.ok().body(session.getId() + " " + auth.getName());
+	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout() {
+		return ResponseEntity.ok().body("Logout");
 	}
 }
